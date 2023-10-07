@@ -1,0 +1,8 @@
+# New Words
+Graphi
+graphiql
+surrealdb
+hmac
+Hmac
+jsonwebtoken
+chrono
