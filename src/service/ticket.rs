@@ -8,12 +8,19 @@ use serde::{Deserialize, Serialize};
 use surrealdb::sql::Thing;
 
 #[derive(Clone, Debug, Serialize, Deserialize, SimpleObject)]
+struct Detail {
+    c: i32,
+    d: i32,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, SimpleObject)]
 #[graphql(complex)]
 pub struct Ticket {
     #[graphql(skip)]
     pub id: Option<Thing>,
     pub creator: String,
     pub title: String,
+    detail: Detail,
 }
 #[ComplexObject]
 impl Ticket {
@@ -25,6 +32,7 @@ impl Ticket {
 #[derive(Deserialize, InputObject)]
 pub struct CreateTicketInput {
     pub title: String,
+    pub detail: Detail
 }
 
 pub struct TicketService<'a> {
@@ -46,6 +54,7 @@ impl<'a> TicketService<'a> {
                 id: None,
                 creator: self.ctx.user_id()?,
                 title: ct_input.title,
+                detail: Detail { c: 1, d: 2 }
             })
             .await
             .map(|v: Vec<Ticket>| v.into_iter().next().expect("created ticket"))
